@@ -22,7 +22,14 @@ export default function Application(props) {
     },
   ];
 
+  const interviewer = {
+    id: 1,
+    name: "Sylvia Palmer",
+    avatar: "https://i.imgur.com/LpaY82x.png"
+  };
+
   const [day, setDay] = useState("Monday");
+  //const [interviewer, setInterviewer] = useState("Sylvia Palmer");
 
   return (
     <main className="layout">
