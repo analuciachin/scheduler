@@ -3,7 +3,7 @@ import axios from "axios";
 
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors"
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
 import "components/Application.scss";
 
@@ -17,17 +17,13 @@ export default function Application(props) {
   });
 
   const setDay = day => setState({ ...state, day });
-  // const setDays = days => setState(prev => ({ ...prev, days }));
-  // const setAppointments = appointments => setState(prev => ({ ...prev, appointments }));
-  // const setInterviewers = interviewers => setState(prev => ({ ...prev, interviewers }));
 
   const interviewers = getInterviewersForDay(state, state.day);
 
   const appointments = getAppointmentsForDay(state, state.day);
   const schedule = appointments.map((appointment) => {
-    //console.log("THIS ONE: ", appointment)
     const interview = getInterview(state, appointment.interview);
-    //console.log("THIS ONE NEXT: ", interview)
+    console.log('interview', interview);
     return(
       <Appointment
         key={appointment.id}
@@ -36,6 +32,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     )
   })
@@ -48,17 +45,13 @@ export default function Application(props) {
       axios.get("api/interviewers")
     ])
     .then((all) => {
-      //console.log(response);
-      // setDays(all[0].data)
-      // setAppointments(all[1].data)
-      // setInterviewers(all[2].data)
       setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }))
     })
   },[])
 
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    console.log('line 54 ', id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -67,13 +60,38 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    
-    setState({
-      ...state,
-      appointments
+    return new Promise((resolve, reject) => {
+      console.log('inside promise');
+      axios.put('http://localhost:8001/api/appointments/' + id, {interview:interview})
+      .then(function (response) {
+        setState({
+          ...state,
+          appointments
+        });
+        resolve();
+      })
     });
-    console.log(appointments);
-    //setAppointments(appointments);
+  }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return new Promise((resolve, reject) => {
+      setState({
+        ...state,
+        appointments
+      });
+      resolve();
+    });
+
   }
 
   return (
