@@ -23,7 +23,7 @@ export default function Application(props) {
   const appointments = getAppointmentsForDay(state, state.day);
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
-    console.log('interview', interview);
+    //console.log('interview', interview);
     return(
       <Appointment
         key={appointment.id}
@@ -51,7 +51,7 @@ export default function Application(props) {
 
 
   function bookInterview(id, interview) {
-    console.log('line 54 ', id, interview);
+    console.log('bookInterview: ', id);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -61,9 +61,10 @@ export default function Application(props) {
       [id]: appointment
     };
     return new Promise((resolve, reject) => {
-      console.log('inside promise');
+      //console.log('inside promise');
       axios.put('http://localhost:8001/api/appointments/' + id, {interview:interview})
       .then(function (response) {
+        console.log('axios put')
         setState({
           ...state,
           appointments
@@ -74,6 +75,7 @@ export default function Application(props) {
   }
 
   function cancelInterview(id) {
+    console.log('cancelInterview: ', id)
     const appointment = {
       ...state.appointments[id],
       interview: null
@@ -85,11 +87,16 @@ export default function Application(props) {
     };
 
     return new Promise((resolve, reject) => {
-      setState({
-        ...state,
-        appointments
-      });
-      resolve();
+      console.log('cancelInterview id', id);
+      axios.delete('http://localhost:8001/api/appointments/' + id)
+      .then(function (response) {
+        console.log('axios delete')
+        setState({
+          ...state,
+          appointments
+        });
+        resolve();
+      })
     });
 
   }
