@@ -5,6 +5,7 @@ import Empty from "components/Appointment/Empty";
 import Form from "components/Appointment/Form";
 import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
+import Error from "components/Appointment/Error";
 import useVisualMode from "hooks/useVisualMode";
 
 import "components/Appointment/styles.scss";
@@ -33,10 +34,15 @@ export default function Appointment(props) {
       interviewer
     };
     transition(SAVING);
-    props.bookInterview(props.id, interview).then(() => {
+    props.bookInterview(props.id, interview)
+      .then(() => {
       console.log('save .then')  
       transition(SHOW)
-    });
+      })
+      .catch((error) => {
+        console.log('save .catch');
+        transition(ERROR_SAVE, true)
+      });
   }
 
 
@@ -46,12 +52,17 @@ export default function Appointment(props) {
   }
 
   function confirmDelete(id) { 
-    transition(DELETING);
+    console.log('inside confirmDelete')
+    transition(DELETING, true);
     props.cancelInterview(id)
       .then(() => {
-        console.log('inside confirmDelete .then')
+        console.log('confirmDelete .then')
         transition(EMPTY);
-      });
+      })
+      .catch(error => {
+        console.log('confirmDelete .catch', error);
+        transition(ERROR_DELETE, true)
+      })
   }
 
 
@@ -93,6 +104,9 @@ export default function Appointment(props) {
       )}
       {mode === DELETING && (
         <Status message='Deleting' />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error onClose={back} />
       )}
     </article>
   );

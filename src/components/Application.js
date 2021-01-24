@@ -71,6 +71,7 @@ export default function Application(props) {
         });
         resolve();
       })
+      .catch(() => reject());
     });
   }
 
@@ -97,6 +98,7 @@ export default function Application(props) {
         });
         resolve();
       })
+      .catch(() => reject());
     });
 
   }
