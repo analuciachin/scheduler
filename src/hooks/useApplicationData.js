@@ -25,6 +25,9 @@ export default function useApplicationData(initial) {
     })
   },[])
 
+  useEffect(() => console.log('appointments useEffect ', state.appointments), [state.appointments]);
+  useEffect(() => console.log('days useEffect ', state.days), [state.days]);
+
 
   function bookInterview(id, interview) {
     console.log('bookInterview: ', id);
@@ -36,6 +39,30 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment
     };
+    
+    let dayId;
+    if (id < 6) {
+      dayId = 0;
+    } else if (id < 11) {
+      dayId = 1;
+    } else if (id < 16) {
+      dayId = 2;
+    } else if (id < 21) {
+      dayId = 3;
+    } else dayId = 4;
+
+    console.log('state.days[dayId]', state.days[dayId])
+    const availableSpots = state.days[dayId].spots
+    const day = {
+      ...state.days[dayId],
+      spots: availableSpots - 1
+   };
+
+    const updatedDays = [...state.days]
+    updatedDays[dayId] = day;
+    
+   
+
     return new Promise((resolve, reject) => {
       //console.log('inside promise');
       axios.put('http://localhost:8001/api/appointments/' + id, {interview:interview})
@@ -43,7 +70,8 @@ export default function useApplicationData(initial) {
         console.log('axios put')
         setState({
           ...state,
-          appointments
+          appointments,
+          days: updatedDays
         });
         resolve();
       })
@@ -63,6 +91,27 @@ export default function useApplicationData(initial) {
       [id]: appointment
     };
 
+    let dayId;
+    if (id < 6) {
+      dayId = 0;
+    } else if (id < 11) {
+      dayId = 1;
+    } else if (id < 16) {
+      dayId = 2;
+    } else if (id < 21) {
+      dayId = 3;
+    } else dayId = 4;
+
+    console.log('state.days[dayId]', state.days[dayId])
+    const availableSpots = state.days[dayId].spots
+    const day = {
+      ...state.days[dayId],
+      spots: availableSpots + 1
+    };
+
+    const updatedDays = [...state.days]
+    updatedDays[dayId] = day;
+
     return new Promise((resolve, reject) => {
       console.log('cancelInterview id', id);
       axios.delete('http://localhost:8001/api/appointments/' + id)
@@ -70,7 +119,8 @@ export default function useApplicationData(initial) {
         console.log('axios delete')
         setState({
           ...state,
-          appointments
+          appointments,
+          days: updatedDays
         });
         resolve();
       })
