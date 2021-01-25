@@ -1,5 +1,5 @@
 import React from "react";
-//import classNames from "classnames";
+import PropTypes from 'prop-types';
 import InterviewerListItem from "components/InterviewerListItem";
 
 import "components/InterviewerList.scss";
@@ -8,14 +8,16 @@ import "components/InterviewerList.scss";
 export default function InterviewerList(props) {
   const interviewers = props.interviewers;
 
-  const interviewersData = interviewers.map(interviewer => 
+  let interviewersData;
+  if (Array.isArray(interviewers)) {
+    interviewersData = interviewers.map(interviewer => 
       <InterviewerListItem key={interviewer.id} 
         name={interviewer.name} 
         avatar={interviewer.avatar} 
         selected={interviewer.id === props.interviewer}
         setInterviewer={events => props.setInterviewer(interviewer.id)}/>
       );
-
+  }
 
   return (
     <section className="interviewers">
@@ -28,6 +30,9 @@ export default function InterviewerList(props) {
 }
 
 
+InterviewerList.propTypes = {
+  interviewers: PropTypes.array.isRequired
+};
 
 /*
 InterviewerList needs the following props
