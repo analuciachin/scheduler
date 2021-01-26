@@ -10,7 +10,8 @@ export default function Form(props) {
 
   const reset = () => {
     console.log("here")
-      setName("")
+      setName("");
+      setError("");
       setInterviewer(null)
   }
 
@@ -25,6 +26,7 @@ export default function Form(props) {
       return;
     }
   
+    setError("");
     props.onSave(name, interviewer);
   }
 
