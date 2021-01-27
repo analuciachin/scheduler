@@ -67,7 +67,7 @@ export default function Appointment(props) {
 
 
   return (  
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && ( 
@@ -106,16 +106,12 @@ export default function Appointment(props) {
         <Status message='Deleting' />
       )}
       {mode === ERROR_DELETE && (
-        <Error onClose={back} />
+        <Error onClose={back} text="Could not delete appointment" />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error onClose={back} text="Could not save appointment" />
       )}
     </article>
   );
 }
 
-
-/*
-    <article className="appointment">
-      <Header time={props.time} />
-      { props.interview ? <Show student={props.interview.student} interviewer={props.interviewer} /> : <Empty />}
-    </article>
-*/
