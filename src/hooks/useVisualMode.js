@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// change the views of the application depending on the mode
 export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);

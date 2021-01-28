@@ -23,7 +23,6 @@ export default function Application(props) {
   const appointments = getAppointmentsForDay(state, state.day);
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
-    //console.log('interview', interview);
     return(
       <Appointment
         key={appointment.id}
@@ -69,19 +68,3 @@ export default function Application(props) {
   );
 }
 
-
-/*
-DayList needs the following props:
-
-days:Array a list of day objects (each object includes an id, name, and spots)
-day:String the currently selected day
-setDay:Function accepts the name of the day eg. "Monday", "Tuesday"
-*/
-
-/*
-InterviewerList needs the following props
-
-interviewers:array - an array of objects containing the information of each interviewer
-interviewer:number - the id of an interviewer
-setInterviewer:function - a function that accepts an interviewer id
-*/

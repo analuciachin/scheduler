@@ -23,11 +23,11 @@ const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
 
-  //console.log('Appointment - props', props);
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  // show the Show component if save was successful or the Error component otherwise
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -36,31 +36,26 @@ export default function Appointment(props) {
     transition(SAVING);
     props.bookInterview(props.id, interview)
       .then(() => {
-      console.log('save .then')  
       transition(SHOW)
       })
       .catch((error) => {
-        console.log('save .catch');
         transition(ERROR_SAVE, true)
       });
   }
 
-
+  // show the Confirm component when delete button is clicked
   function deleteInterview() {
-    console.log('inside deleteInterview')
     transition(CONFIRM);
   }
 
+  // show the add button if there is no error or the Error component otherwise
   function confirmDelete(id) { 
-    console.log('inside confirmDelete')
     transition(DELETING, true);
     props.cancelInterview(id)
       .then(() => {
-        console.log('confirmDelete .then')
         transition(EMPTY);
       })
       .catch(error => {
-        console.log('confirmDelete .catch', error);
         transition(ERROR_DELETE, true)
       })
   }

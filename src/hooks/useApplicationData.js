@@ -12,7 +12,7 @@ export default function useApplicationData(initial) {
 
   const setDay = day => setState({ ...state, day });
 
-
+  // http requests to load all the to the page in the first render
   useEffect(() => {
 
     Promise.all([
@@ -25,12 +25,8 @@ export default function useApplicationData(initial) {
     })
   },[])
 
-  useEffect(() => console.log('appointments useEffect ', state.appointments), [state.appointments]);
-  useEffect(() => console.log('days useEffect ', state.days), [state.days]);
-
-
+  // create a new appointment and update the number of available spots
   function bookInterview(id, interview) {
-    console.log('bookInterview: ', id);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -51,7 +47,6 @@ export default function useApplicationData(initial) {
       dayId = 3;
     } else dayId = 4;
 
-    console.log('state.days[dayId]', state.days[dayId])
     const availableSpots = state.days[dayId].spots
     const day = {
       ...state.days[dayId],
@@ -64,10 +59,8 @@ export default function useApplicationData(initial) {
    
 
     return new Promise((resolve, reject) => {
-      //console.log('inside promise');
       axios.put('http://localhost:8001/api/appointments/' + id, {interview:interview})
       .then(function (response) {
-        console.log('axios put')
         setState({
           ...state,
           appointments,
@@ -79,8 +72,8 @@ export default function useApplicationData(initial) {
     });
   }
 
+  // delete an appointment and update the number of available spots
   function cancelInterview(id) {
-    console.log('cancelInterview: ', id)
     const appointment = {
       ...state.appointments[id],
       interview: null
@@ -102,7 +95,6 @@ export default function useApplicationData(initial) {
       dayId = 3;
     } else dayId = 4;
 
-    console.log('state.days[dayId]', state.days[dayId])
     const availableSpots = state.days[dayId].spots
     const day = {
       ...state.days[dayId],
@@ -113,10 +105,8 @@ export default function useApplicationData(initial) {
     updatedDays[dayId] = day;
 
     return new Promise((resolve, reject) => {
-      console.log('cancelInterview id', id);
       axios.delete('http://localhost:8001/api/appointments/' + id)
       .then(function (response) {
-        console.log('axios delete')
         setState({
           ...state,
           appointments,
@@ -131,3 +121,7 @@ export default function useApplicationData(initial) {
 
   return { state, setDay, bookInterview, cancelInterview };
 }
+
+
+
+

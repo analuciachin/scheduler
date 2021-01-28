@@ -1,5 +1,6 @@
 import React from "react";
 
+// Shows error message in save or cancel
 export default function Error(props) {
 
   return (
