@@ -19,7 +19,7 @@ Interview Scheduler is a project from the Web development bootcamp curriculum. I
 
 !["Screenshot of the create an appointment"](https://github.com/analuciachin/scheduler/blob/master/docs/scheduler_create_appointment.png)
 
-!["Screenshot of the new appointment"](https://github.com/analuciachin/tweeter/blob/master/docs/scheduler_new_appointment.png)
+!["Screenshot of the new appointment"](https://github.com/analuciachin/scheduler/blob/master/docs/scheduler_new_appointment.png)
 
 
 ## Running Webpack Development Server
